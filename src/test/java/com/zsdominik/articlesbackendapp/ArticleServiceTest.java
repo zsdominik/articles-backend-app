@@ -25,6 +25,9 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 @RunWith(MockitoJUnitRunner.class)
 public class ArticleServiceTest {
 
+    private Article mockArticle1;
+    private Article mockArticle2;
+
     @Mock
     private ArticleRepository articleRepository;
 
@@ -32,13 +35,12 @@ public class ArticleServiceTest {
     private ArticleService articleService;
 
     @Before
-    public void setUpTest() {
-
+    public void init() {
         OffsetDateTime mockDate = OffsetDateTime.parse("2019-10-21T12:00-06:00");
         Author mockAuthor = new Author(1L, "John", "Doe");
 
-        Article mockArticle1 = new Article(1L, "Article 1 Title", "Article 1 Summary", "Article text", mockAuthor, mockDate, mockDate);
-        Article mockArticle2 = new Article(2L, "Article 2 Title", "Article 2 Summary", "Article text", mockAuthor, mockDate, mockDate);
+        mockArticle1 = new Article(1L, "Article 1 Title", "Article 1 Summary", "Article text", mockAuthor, mockDate, mockDate);
+        mockArticle2 = new Article(2L, "Article 2 Title", "Article 2 Summary", "Article text", mockAuthor, mockDate, mockDate);
         Article mockArticle3 = new Article(3L, "Article 3 Title", "Article 3 Summary", "Article text", mockAuthor, mockDate, mockDate);
 
         List<Article> mockArticleList = new LinkedList<>();
@@ -48,6 +50,7 @@ public class ArticleServiceTest {
 
         Mockito.when(articleRepository.findById(2L)).thenReturn(java.util.Optional.of(mockArticle2));
         Mockito.when(articleRepository.findAll()).thenReturn(mockArticleList);
+        Mockito.when(articleRepository.save(mockArticle1)).thenReturn(mockArticle1);
 
         MockitoAnnotations.initMocks(this);
     }
@@ -66,9 +69,7 @@ public class ArticleServiceTest {
         Long articleId = 2L;
         Optional<Article> optionalArticleById = articleService.getOneArticleById(articleId);
 
-        OffsetDateTime mockDate = OffsetDateTime.parse("2019-10-21T12:00-06:00");
-        Author expectedAuthor = new Author(1L, "John", "Doe");
-        Article expectedArticle = new Article(2L, "Article 2 Title", "Article 2 Summary", "Article text", expectedAuthor, mockDate, mockDate);
+        Article expectedArticle = mockArticle2;
 
         assertNotNull(optionalArticleById);
         assertTrue(optionalArticleById.isPresent());
@@ -86,6 +87,21 @@ public class ArticleServiceTest {
         assertEquals(expectedArticle.getText(), articleById.getText());
     }
 
+    @Test
+    public void saveNewArticleTest() {
+        Article savedArticle = articleService.saveNewArticle(mockArticle1);
 
+        assertNotNull(savedArticle);
+        assertEquals(savedArticle.getText(), mockArticle1.getText());
+        assertEquals(savedArticle.getId(), mockArticle1.getId());
+        assertEquals(savedArticle.getTitle(), mockArticle1.getTitle());
+        assertEquals(savedArticle.getDateUpdated(), mockArticle1.getDateUpdated());
+        assertEquals(savedArticle.getDateCreated(), mockArticle1.getDateCreated());
+        assertEquals(savedArticle.getSummary(), mockArticle1.getSummary());
+        assertEquals(savedArticle.getAuthor().getId(), mockArticle1.getAuthor().getId());
+        assertEquals(savedArticle.getAuthor().getLastName(), mockArticle1.getAuthor().getLastName());
+        assertEquals(savedArticle.getAuthor().getFirstName(), mockArticle1.getAuthor().getFirstName());
+
+    }
 
 }
