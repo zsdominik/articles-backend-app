@@ -1,8 +1,5 @@
 package com.zsdominik.articlesbackendapp.entity;
 
-import lombok.Data;
-import lombok.NoArgsConstructor;
-
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -15,8 +12,6 @@ import javax.validation.constraints.Size;
 import java.time.OffsetDateTime;
 
 @Entity(name = "articles")
-@Data
-@NoArgsConstructor
 public class Article {
 
     @Id
@@ -43,4 +38,44 @@ public class Article {
 
     @Column(columnDefinition = "timestamp with time zone")
     private OffsetDateTime dateUpdated;
+
+    public Article() {}
+
+    public Article(@Size(max = 100) String title, @Size(max = 255) String summary, String text, Author author, OffsetDateTime dateCreated, OffsetDateTime dateUpdated) {
+        this.title = title;
+        this.summary = summary;
+        this.text = text;
+        this.author = author;
+        this.dateCreated = dateCreated;
+        this.dateUpdated = dateUpdated;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public String getSummary() {
+        return summary;
+    }
+
+    public String getText() {
+        return text;
+    }
+
+    public Author getAuthor() {
+        return author;
+    }
+
+    public OffsetDateTime getDateCreated() {
+        return dateCreated;
+    }
+
+    public OffsetDateTime getDateUpdated() {
+        return dateUpdated;
+    }
+    
 }
