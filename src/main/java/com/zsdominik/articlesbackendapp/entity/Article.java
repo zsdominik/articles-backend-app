@@ -1,5 +1,6 @@
 package com.zsdominik.articlesbackendapp.entity;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.Type;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -9,10 +10,12 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
+import javax.persistence.SequenceGenerator;
 import javax.validation.constraints.Size;
 import java.time.OffsetDateTime;
 
@@ -20,10 +23,11 @@ import java.time.OffsetDateTime;
 public class Article {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY, generator = "article_generator")
+    @SequenceGenerator(name = "article_generator", sequenceName = "article_seq", initialValue = 4)
     private Long id;
 
-    @Column(length = 100)
+    @Column(length = 100, nullable = false)
     @Size(max = 100)
     private String title;
 
@@ -31,22 +35,28 @@ public class Article {
     @Size(max = 255)
     private String summary;
 
-    @Column(columnDefinition = "TEXT")
-    @Lob @Basic(fetch = FetchType.LAZY)
+    @Column(columnDefinition = "TEXT", nullable = false)
+    @Lob
+    @Basic(fetch = FetchType.LAZY)
     @Type(type = "org.hibernate.type.TextType")
     private String text;
 
     @ManyToOne
-    @JoinColumn(updatable = false)
+    @JoinColumn(updatable = false, nullable = false)
     private Author author;
 
-    @Column(columnDefinition = "TIMESTAMP WITH TIME ZONE")
+    @CreationTimestamp
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
+    @Column(columnDefinition = "TIMESTAMP WITH TIME ZONE", nullable = false, updatable = false)
     private OffsetDateTime dateCreated;
 
-    @Column(columnDefinition = "TIMESTAMP WITH TIME ZONE")
+    @UpdateTimestamp
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
+    @Column(columnDefinition = "TIMESTAMP WITH TIME ZONE", nullable = false)
     private OffsetDateTime dateUpdated;
 
-    public Article() {}
+    public Article() {
+    }
 
     public Article(Long id, @Size(max = 100) String title, @Size(max = 255) String summary, String text, Author author, OffsetDateTime dateCreated, OffsetDateTime dateUpdated) {
         this.id = id;
@@ -78,14 +88,27 @@ public class Article {
         return author;
     }
 
-    @CreationTimestamp
     public OffsetDateTime getDateCreated() {
         return dateCreated;
     }
 
-    @UpdateTimestamp
     public OffsetDateTime getDateUpdated() {
         return dateUpdated;
     }
 
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public void setSummary(String summary) {
+        this.summary = summary;
+    }
+
+    public void setText(String text) {
+        this.text = text;
+    }
+
+    public void setAuthor(Author author) {
+        this.author = author;
+    }
 }
