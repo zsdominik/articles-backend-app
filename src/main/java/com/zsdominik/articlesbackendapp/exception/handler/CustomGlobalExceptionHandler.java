@@ -29,7 +29,7 @@ public class CustomGlobalExceptionHandler extends ResponseEntityExceptionHandler
 
         Map<String, Object> body = new LinkedHashMap<>();
 
-        body.put("timestamp", LocalDateTime.parse(LocalDateTime.now().toString(), FORMATTER));
+        body.put("timestamp", LocalDateTime.now().format(FORMATTER));
         body.put("status", status.value());
 
         //Get all errors

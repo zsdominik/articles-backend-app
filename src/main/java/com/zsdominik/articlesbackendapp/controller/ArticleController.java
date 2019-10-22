@@ -30,7 +30,7 @@ public class ArticleController {
     }
 
     @GetMapping(value = "/articles")
-    public List<Article> getAllArticle() {
+    public List<Article> getAllArticleOrderedByTitle() {
         return articleService.getAllArticleOrderedByTitle();
     }
 
