@@ -4,8 +4,10 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.Table;
 
-@Entity(name = "authors")
+@Entity
+@Table(name = "authors")
 public class Author {
 
     @Id
@@ -18,7 +20,8 @@ public class Author {
     @Column
     private String lastName;
 
-    public Author() { }
+    public Author() {
+    }
 
     public Author(Long id, String firstName, String lastName) {
         this.id = id;

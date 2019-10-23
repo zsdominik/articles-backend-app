@@ -16,10 +16,12 @@ import javax.persistence.JoinColumn;
 import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
+import javax.persistence.Table;
 import javax.validation.constraints.Size;
 import java.time.OffsetDateTime;
 
-@Entity(name = "articles")
+@Entity
+@Table(name = "articles")
 public class Article {
 
     @Id
