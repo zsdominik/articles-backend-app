@@ -7,7 +7,6 @@ import com.zsdominik.articlesbackendapp.exception.ArticleNotFoundException;
 import com.zsdominik.articlesbackendapp.exception.AuthorNotFoundException;
 import com.zsdominik.articlesbackendapp.exception.MoreThanOneFieldUpdateException;
 import com.zsdominik.articlesbackendapp.service.ArticleService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -24,7 +23,6 @@ public class ArticleController {
 
     private final ArticleService articleService;
 
-    @Autowired
     public ArticleController(ArticleService articleService) {
         this.articleService = articleService;
     }

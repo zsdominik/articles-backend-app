@@ -1,6 +1,5 @@
 package com.zsdominik.articlesbackendapp.entity;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.Type;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -48,12 +47,10 @@ public class Article {
     private Author author;
 
     @CreationTimestamp
-    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     @Column(columnDefinition = "TIMESTAMP WITH TIME ZONE", nullable = false, updatable = false)
     private OffsetDateTime dateCreated;
 
     @UpdateTimestamp
-    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     @Column(columnDefinition = "TIMESTAMP WITH TIME ZONE", nullable = false)
     private OffsetDateTime dateUpdated;
 
