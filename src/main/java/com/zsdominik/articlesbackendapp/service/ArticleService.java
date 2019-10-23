@@ -15,6 +15,7 @@ import com.zsdominik.articlesbackendapp.repository.AuthorRepository;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -34,14 +35,17 @@ public class ArticleService {
         this.articleMapper = articleMapper;
     }
 
+    @Transactional
     public List<Article> getAllArticleOrderedByTitle() {
         return articleRepository.findAll(Sort.by("title"));
     }
 
+    @Transactional
     public Optional<Article> getOneArticleById(Long articleId) {
         return articleRepository.findById(articleId);
     }
 
+    @Transactional
     public Article saveNewArticle(NewArticleRequestDto articleDto) throws AuthorNotFoundException {
         Author author = authorRepository.findById(articleDto.getAuthorId())
                 .orElseThrow(() -> new AuthorNotFoundException(articleDto.getAuthorId()));
@@ -50,10 +54,12 @@ public class ArticleService {
         return articleRepository.save(newArticle);
     }
 
+    @Transactional
     public void deleteArticleById(Long articleId) {
         articleRepository.deleteById(articleId);
     }
 
+    @Transactional
     public Article updateOneFieldOfArticle(UpdateArticleRequestDto updatingArticle, Long articleId) throws ArticleNotFoundException, MoreThanOneFieldUpdateException {
         validateChangingFieldAmount(updatingArticle);
         return articleRepository.findById(articleId)
